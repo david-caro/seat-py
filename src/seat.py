@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-Seat-Python (0.1)
+Seat-Python (0.1.1)
 Python CouchDB Wrapper
 http://github.com/stackd/seat-py
 
