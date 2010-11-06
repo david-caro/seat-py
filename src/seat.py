@@ -18,6 +18,10 @@ DEPENDENCIES
 Python 2.x.x
 
 """
+import re
+import urlparse
+import string
+import base64
 import httplib
 import json
 
@@ -27,18 +31,21 @@ class Seat(object):
     PORT = '5984'
     USER_AGENT = 'Seat-Python (0.1)'
     
-    def __init__(self, database, username = None, password = None):
-        if (len(database) < 1):
-            raise SeatError('InstanceError', "Please define a database. Example: seat_instance = Seat('my_database')")
-        self.database = database
+    def __init__(self, database = '', username = None, password = None):
+        if re.match(r'^http\://|^https://', database):
+            uri = urlparse.urlparse(database)
+            database = uri.path[1:]
+            username = uri.username
+            password = uri.password
+            self.HOST = uri.hostname
+            self.PORT = str(uri.port)
         if username == None and password == None:
             self.resource = httplib.HTTPConnection(self.HOST+u':'+self.PORT)
             self.headers = {'Content-Type' : 'application/json', 'User-Agent' : self.USER_AGENT}
         else:
-            self.username = username
-            self.password = password
-            self.resource = httplib.HTTPConnection(self.username+u':'+self.password+u'@'+self.HOST+u':'+self.PORT)
-            self.headers = {'Content-Type' : 'application/json', 'User-Agent' : self.USER_AGENT}
+            self.resource = httplib.HTTPConnection(self.HOST+u':'+self.PORT)
+            self.headers = {'Content-Type' : 'application/json', 'User-Agent' : self.USER_AGENT, 'Authorization' : 'Basic '+string.strip(base64.encodestring(username+':'+password))}
+        self.database = database
             
     def __send(self, method, args):
         """
