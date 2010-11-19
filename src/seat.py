@@ -3,7 +3,7 @@
 """
 Seat-Python (0.1.1)
 Python CouchDB Wrapper
-http://github.com/stackd/seat-py
+https://github.com/stackd/seat-py
 
 DOCUMENTATION
 ----------------------------------------
@@ -11,7 +11,7 @@ see README.md
 
 LICENSE
 ----------------------------------------
-MIT, see LICENSE
+MIT/X11, see LICENSE
 
 DEPENDENCIES
 ----------------------------------------
