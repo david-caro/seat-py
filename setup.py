@@ -8,8 +8,8 @@ setup(
     description = 'Seat-Python is an elegant and lightweight REST interface to CouchDB',
     author = 'Fredrick Galoso - Stackd, LLC',
     license = 'MIT/X11',
-    url = 'http://github.com/stackd/seat-py',
-	download_url = 'http://github.com/stackd/seat-py.git',
+    url = 'https://github.com/stackd/seat-py',
+	download_url = 'https://github.com/stackd/seat-py.git',
     package_dir = {'': 'src'},
     py_modules = [
         'seat',
