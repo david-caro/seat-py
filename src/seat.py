@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-Seat-Python (0.2)
+Seat-Python (0.2.1)
 Python CouchDB Wrapper
 https://github.com/stackd/seat-py
 
@@ -29,13 +29,13 @@ import hashlib
 import yaml
 
 __author__ = 'Fredrick Galoso'
-__version__ = '0.2'
+__version__ = '0.2.1'
         
 class Seat(object):
     
     HOST = 'localhost'
     PORT = '5984'
-    USER_AGENT = 'Seat-Python (0.2)'
+    USER_AGENT = 'Seat-Python (0.2.1)'
     
     def __init__(self, database = '', username = None, password = None):
         if re.match(r'^http\://|^https://', database):
@@ -127,7 +127,7 @@ class Seat(object):
         return json.loads(request.read())['rows']
         
 class Utils(object):
-    """Utilities for updating views and data validation"""
+    """Utilities for updating views and data validation."""
     def __init__(self, seat, path = None):
         self.seat = seat
         self.path = path
@@ -142,13 +142,26 @@ class Utils(object):
                     print(yaml.load(view))
         
 class Cache(object):
-    """Caching layer"""
+    """Redis caching layer."""
     def __init__(self, seat):
         self.seat = seat
     pass
     
 class Object(dict):
-    """Bare-metal ORM awesomeness"""
+    """Bare-metal ORM awesomeness.
+            Create a new object model to be saved in CouchDB:
+        
+            import seat
+            class User(seat.Object):
+                database = seat.Seat('musicians')
+            user = User(firstname = 'Eric', lastname = 'Clapton', instrument = 'guitar', age = 65)
+            user['firstname'] #Eric
+            user.exists() #False
+            user.save() #Saves user to database
+            user.exists() #True
+            user.delete() #Deletes user
+            user.delete() #Throws SeatError(404) - Document not found.
+    """
     def __init__(self, **kwargs):
         for key in kwargs:
             self[key] = kwargs[key]

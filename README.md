@@ -1,4 +1,4 @@
-#Seat-Python (0.2)
+#Seat-Python (0.2.1)
 Python [CouchDB][1] wrapper: elegant and lightweight REST interface to CouchDB datastore.
 
 ##License
