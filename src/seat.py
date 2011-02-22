@@ -149,22 +149,20 @@ class Cache(object):
     
 class Object(dict):
     """Bare-metal ORM awesomeness"""
-    def __init__(self, seat, **kwargs):
+    def __init__(self, **kwargs):
         for key in kwargs:
             self[key] = kwargs[key]
         self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(self)).hexdigest()
-        self._seat = seat
-        self.database = seat.get()
         
     def exists(self):
-        response = self._seat.get(self['_id'])
+        response = self.database.get(self['_id'])
         if ('error' in response):
             return False
         else:
             return True
     
     def save(self):
-        response = self._seat.put(dict(self))
+        response = self.database.put(dict(self))
         if ('error' in response and response['error'] == 'conflict'):
             #Verify that contents of the object have not changed
             contents = {}
@@ -172,13 +170,13 @@ class Object(dict):
                 if key != '_id':
                     contents[key] = self[key]
             self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(contents)).hexdigest()
-            return self._seat.put(dict(self))
+            return self.database.put(dict(self))
             
     def delete(self):
         try:
             if (self.exists):
-                self['_rev'] = self._seat.get(self['_id'])['_rev']
-                response = self._seat.delete(dict(self))
+                self['_rev'] = self.database.get(self['_id'])['_rev']
+                response = self.database.delete(dict(self))
                 return response
         except KeyError:
             raise SeatError(404, 'Document not found.')
