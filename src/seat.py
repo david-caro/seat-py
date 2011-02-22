@@ -25,6 +25,7 @@ import string
 import base64
 import httplib
 import json
+import hashlib
 import yaml
 
 __author__ = 'Fredrick Galoso'
@@ -138,14 +139,50 @@ class Utils(object):
             for yaml_file in files[len(files) - 1]:
                 if yaml_file.find('.yaml'):
                     view = file(self.path + yaml_file, 'r')
-                    print yaml.load(view)
+                    print(yaml.load(view))
         
 class Cache(object):
     """Caching layer"""
     def __init__(self, seat):
         self.seat = seat
     pass
+    
+class Object(dict):
+    """Bare-metal ORM awesomeness"""
+    def __init__(self, seat, **kwargs):
+        for key in kwargs:
+            self[key] = kwargs[key]
+        self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(self)).hexdigest()
+        self._seat = seat
+        self.database = seat.get()
+        
+    def exists(self):
+        response = self._seat.get(self['_id'])
+        if ('error' in response):
+            return False
+        else:
+            return True
+    
+    def save(self):
+        response = self._seat.put(dict(self))
+        if ('error' in response and response['error'] == 'conflict'):
+            #Verify that contents of the object have not changed
+            contents = {}
+            for key in self:
+                if key != '_id':
+                    contents[key] = self[key]
+            self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(contents)).hexdigest()
+            return self._seat.put(dict(self))
             
+    def delete(self):
+        try:
+            if (self.exists):
+                self['_rev'] = self._seat.get(self['_id'])['_rev']
+                response = self._seat.delete(dict(self))
+                return response
+        except KeyError:
+            raise SeatError(404, 'Document not found.')
+        
 class SeatError(Exception):
     def __init__(self, type, message):
             Exception.__init__(self, message)
