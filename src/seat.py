@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-Seat-Python (0.2.1)
+Seat-Python (0.2.2)
 Python CouchDB Wrapper
 https://github.com/stackd/seat-py
 
@@ -29,13 +29,13 @@ import hashlib
 import yaml
 
 __author__ = 'Fredrick Galoso'
-__version__ = '0.2.1'
+__version__ = '0.2.2'
         
 class Seat(object):
     
     HOST = 'localhost'
     PORT = '5984'
-    USER_AGENT = 'Seat-Python (0.2.1)'
+    USER_AGENT = 'Seat-Python (0.2.2)'
     
     def __init__(self, database = '', username = None, password = None):
         if re.match(r'^http\://|^https://', database):
@@ -167,22 +167,45 @@ class Object(dict):
             self[key] = kwargs[key]
         self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(self)).hexdigest()
         
+    def __hash(self):
+        """SHA1 checksum object contents."""
+        contents = {}
+        for key in self:
+            if key != '_id':
+                contents[key] = self[key]
+        return hashlib.sha1(str(contents)).hexdigest()
+        
     def exists(self):
         response = self.database.get(self['_id'])
         if ('error' in response):
             return False
         else:
             return True
+            
+    def get(self, _id = None):
+        if _id != None:
+            request = self.database.get(_id)
+            doc = self.__class__()
+            for key in request:
+                    doc[key] = request[key]
+            return doc
+        else:
+            response = self.database.get(self['_id'])
+            if ('error' in response):
+                raise SeatError(404, 'Document not found.')
+            else:
+                return response
+                
+    def update(self):
+        response = self.database.get(self['_id'])
+        self['_rev'] = response['_rev']
+        return self.database.put(dict(self))
     
     def save(self):
         response = self.database.put(dict(self))
         if ('error' in response and response['error'] == 'conflict'):
             #Verify that contents of the object have not changed
-            contents = {}
-            for key in self:
-                if key != '_id':
-                    contents[key] = self[key]
-            self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(contents)).hexdigest()
+            self['_id'] = self.__class__.__name__ + '.' + self.__hash()
             return self.database.put(dict(self))
             
     def delete(self):
