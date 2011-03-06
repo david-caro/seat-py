@@ -259,8 +259,6 @@ Trying to retrieve that object from CouchDB will throw a SeatError:
     >> False
     musician.get()
     >> Traceback (most recent call last):
-      File "src/test/test.py", line 28, in <module>
-        print musician.get()
       File "/Library/Python/2.6/site-packages/seat.py", line 200, in get
         raise SeatError(404, 'Document not found.')
     seat.SeatError: Document not found.
