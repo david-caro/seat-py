@@ -165,7 +165,12 @@ class Object(dict):
     def __init__(self, **kwargs):
         for key in kwargs:
             self[key] = kwargs[key]
-        self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(self)).hexdigest()
+        if '_id' not in kwargs:
+            self['_id'] = self.__class__.__name__ + '.' +hashlib.sha1(str(self)).hexdigest()
+            self.user_defined_id = False
+        else:
+            self['_id'] = kwargs['_id']
+            self.user_defined_id = True
         
     def __hash(self):
         """SHA1 checksum object contents."""
@@ -203,7 +208,7 @@ class Object(dict):
     
     def save(self):
         response = self.database.put(dict(self))
-        if ('error' in response and response['error'] == 'conflict'):
+        if ('error' in response and response['error'] == 'conflict' and not self.user_defined_id):
             #Verify that contents of the object have not changed
             self['_id'] = self.__class__.__name__ + '.' + self.__hash()
             return self.database.put(dict(self))
