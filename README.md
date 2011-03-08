@@ -265,8 +265,9 @@ Trying to retrieve that object from CouchDB will throw a SeatError:
     
 ###Seat-Python, future project milestones
 
-Seat-Python is an ever evolving project. The following features/objectives are being worked on as of this writing (2011-03-05):
+Seat-Python is an ever evolving project. The following features/objectives are being worked on as of this writing (2011-03-08):
 
+* Python 3 support
 * Contribution guidelines and unit test suite
 * CouchDB view management (via YAML)
 * Fixing minor/rare httplib related issues
