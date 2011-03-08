@@ -9,7 +9,7 @@ setup(
     author = 'Fredrick Galoso - Stackd, LLC',
     license = 'MIT/X11',
     url = 'https://github.com/stackd/seat-py',
-	download_url = 'https://github.com/stackd/seat-py.git',
+	download_url = 'https://github.com/stackd/seat-py',
     package_dir = {'': 'src'},
     py_modules = [
         'seat',
