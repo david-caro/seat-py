@@ -7,6 +7,18 @@ MIT/X11 - See [LICENSE][2]
   [1]: http://couchdb.apache.org/
   [2]: http://github.com/stackd/seat-py/blob/master/LICENSE
   
+##Motivation
+
+> Apache CouchDB has started. Time to relax.
+
+Working with CouchDB and Python should be equally effortless, elegant, and unobtrusive.
+
+###Why Seat-Python?
+
+* Simple and straightforward - Less schematizing and just pure Python
+* Lightweight - From its source code to usability, Seat-Python excels at lightly wrapping Python to CouchDB
+* Clean - Syntax emphasizes functionality, readability, and productivity
+  
 ##Getting Started
 
 **Overview**
@@ -15,7 +27,7 @@ Seat-Python is a full featured, lightweight, and extensible Python library for C
 
 * Seat - REST wrapper for CouchDB
 * Utils - Utilities for managing/updating views, as well data validation tools [*work in progress*]
-* Cache - Redis caching layer [*coming soon*]
+* Cache - Redis caching layer for awesome performance [*coming soon*]
 * Object - Bare-metal object-relational mapping, much like ActiveRecord for Ruby on Rails, except Pythonic and powered by CouchDB
 
 **Dependencies**
