@@ -4,8 +4,8 @@ Python [CouchDB][1] wrapper: elegant, lightweight REST interface to CouchDB data
 ##License
 MIT/X11 - See [LICENSE][2]
 
-  [1]: http://couchdb.apache.org/
-  [2]: http://github.com/stackd/seat-py/blob/master/LICENSE
+[1]: http://couchdb.apache.org/
+[2]: http://github.com/stackd/seat-py/blob/master/LICENSE
   
 ##Motivation
 
@@ -41,6 +41,29 @@ Seat-Python is a full featured, lightweight, and extensible Python library for C
     $ git clone https://github.com/stackd/seat-py.git
     $ cd seat-py
     $ python setup.py install
+
+Seat-Python can also be installed with [make][4].
+
+    $ make install
+    
+**Verifying and testing**
+
+After installing the library or when making contributions to the codebase, *make* can also automate the testing process and will run all Seat-Python unit tests.
+
+    $ make test
+    
+Individual tests can be run by make and are also in the *test/* directory.
+
+    $ make test_seat
+    $ make test_object
+    
+Finally, running tests through Python; CLI arguments are inherited from the [unittest][5] framework.
+
+    $ python test/test_seat.py -v
+    $ python test/test_object.py
+
+[4]: http://www.gnu.org/software/make/
+[5]: http://docs.python.org/library/unittest.html#command-line-interface
 
 ##Seat (REST wrapper) - Usage Basics
 
