@@ -5,11 +5,16 @@ import unittest
 import seat
 
 
+DATABASE = 'seat_554e4b55e8cc57f39f16f335b0a63825'
+USER = 'admin'
+PASSWORD = 'admin'
+
+
 class testSeat(unittest.TestCase):
     """Test REST wrapper"""
     def setUp(self):
         self.doc = {'_id': '554e4b55e8cc57f39f16f335b0a63825'}
-        self.database = seat.Seat('seat_554e4b55e8cc57f39f16f335b0a63825', 'admin', 'admin')
+        self.database = seat.Seat(DATABASE, USER, PASSWORD)
         self.database.put()
 
     def tearDown(self):

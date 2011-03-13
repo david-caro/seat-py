@@ -5,8 +5,13 @@ import unittest
 import seat
 
 
+DATABASE = 'seat_554e4b55e8cc57f39f16f335b0a63825'
+USER = 'admin'
+PASSWORD = 'admin'
+
+
 class Test(seat.Object):
-    database = seat.Seat('seat_554e4b55e8cc57f39f16f335b0a63825', 'admin', 'admin')
+    database = seat.Seat(DATABASE, USER, PASSWORD)
 
 
 class testObject(unittest.TestCase):
