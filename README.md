@@ -48,11 +48,11 @@ Seat-Python can also be installed with [make][4].
     
 **Verifying and testing**
 
-After installing the library or when making contributions to the codebase, *make* can also automate the testing process and will run all Seat-Python unit tests.
+After installing the library or when making contributions to the codebase, *make* can also automate the testing process and run all Seat-Python unit tests.
 
     $ make test
     
-Individual tests can be run by make and are also in the *test/* directory.
+In addition, individual tests can be executed by make and are also in the *test/* directory.
 
     $ make test_seat
     $ make test_object
