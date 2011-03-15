@@ -39,14 +39,17 @@ class testObject(unittest.TestCase):
         self.object.database.delete()
 
     def test_object_save(self):
+        """Save object"""
         self.assertEqual(self.object.save(), None)
 
     def test_object_exists(self):
+        """Object exists"""
         self.assertEqual(self.object.exists(), False)
         self.test_object_save()
         self.assertEqual(self.object.exists(), True)
 
     def test_object_get(self):
+        """Get object"""
         try:
             self.object.get()
         except seat.SeatError:
@@ -142,6 +145,7 @@ class testObject(unittest.TestCase):
         self.assertEqual(self.object.get(), response)
 
     def test_object_update(self):
+        """Update object"""
         self.test_object_save()
         response = {
             'rev': '2-9277bb48d6bcd1f081e7db222f89b5d3',
@@ -152,6 +156,7 @@ class testObject(unittest.TestCase):
         self.assertEqual(self.object.update(), response)
 
     def test_object_delete(self):
+        """Delete object"""
         self.test_object_save()
         response = {
             'rev': '2-842ba4a6a140e56f7bc722359807d1da',
@@ -161,6 +166,7 @@ class testObject(unittest.TestCase):
         self.assertEqual(self.object.delete(), response)
 
     def test_create_from_existing_object(self):
+        """Create object from existing object"""
         self.test_object_save()
         response = {
             'rev': '1-a727e7b27c5f8c796294b728bfd60820',
@@ -171,6 +177,7 @@ class testObject(unittest.TestCase):
         self.assertEqual(self.object.save(), response)
 
     def test_get_object_from_existing(self):
+        """Return object from existing document"""
         self.test_create_from_existing_object()
         self.assertEqual(self.object.get('Test.272f675318ba4cab76e20ef8e020576f62813a61')['attribute'], 'another attribute')
         self.assertEqual(self.object.get('Test.272f675318ba4cab76e20ef8e020576f62813a61')['_rev'], '1-a727e7b27c5f8c796294b728bfd60820')

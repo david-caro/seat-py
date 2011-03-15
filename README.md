@@ -1,4 +1,4 @@
-#Seat-Python (0.2.2)
+#Seat-Python (0.2.3)
 Python [CouchDB][1] wrapper: elegant, lightweight REST interface to CouchDB datastore and ORM capable
 
 ##License
@@ -304,7 +304,6 @@ Seat-Python is an ever evolving project. The following features/objectives are b
 
 * Python 3 support
 * CouchDB view management (via YAML)
-* Fixing minor/rare httplib related issues
 
 **Upcoming features:**
 

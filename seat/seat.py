@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-Seat-Python (0.2.2)
+Seat-Python (0.2.3)
 Python CouchDB Wrapper
 https://github.com/stackd/seat-py
 
@@ -29,16 +29,18 @@ import hashlib
 import yaml
 
 __author__ = 'Fredrick Galoso'
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 
 class Seat(object):
 
     HOST = 'localhost'
     PORT = '5984'
-    USER_AGENT = 'Seat-Python (0.2.2)'
+    USER_AGENT = 'Seat-Python (0.2.3)'
 
     def __init__(self, database='', username=None, password=None):
+        self._username = username
+        self._password = password
         if re.match(r'^http\://|^https://', database):
             uri = urlparse.urlparse(database)
             database = uri.path[1:]
@@ -57,8 +59,20 @@ class Seat(object):
         self.Utils = Utils(self)
         self.Cache = Cache(self)
 
+    def __connect(self):
+        username = self._username
+        password = self._password
+        if username == None and password == None:
+            self.resource = httplib.HTTPConnection(self.HOST + u':' + self.PORT)
+            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
+        else:
+            self.resource = httplib.HTTPConnection(self.HOST + u':' + self.PORT)
+            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic ' + string.strip(base64.encodestring(username + ':' + password))}
+
     def __send(self, method, args):
         """Private class method to handle most HTTP requests."""
+        self.__connect()
+
         if (args == None):
             self.resource.request(method, u'/' + self.database, None, self.headers)
             request = self.resource.getresponse()
@@ -89,6 +103,8 @@ class Seat(object):
             Update database with new document:
                 db.put(doc)
         """
+        self.__connect()
+
         if type(doc).__name__ == 'dict':
             self.resource.request(u'PUT', u'/' + self.database + u'/' + str(doc['_id']), json.dumps(doc), self.headers)
             request = self.resource.getresponse()
@@ -106,6 +122,8 @@ class Seat(object):
                 doc = db.get({'_id':'users.kennypowers'})
                 db.delete(doc)
         """
+        self.__connect()
+
         if type(doc).__name__ == 'dict':
             self.resource.request(u'DELETE', '/' + self.database + '/' + str(doc['_id']) + u'/?rev=' + str(doc['_rev']), None, self.headers)
             request = self.resource.getresponse()
@@ -118,6 +136,8 @@ class Seat(object):
             db = Seat('existing_database')
             db.view('user', 'by_first_name', 'Kenny')
         """
+        self.__connect()
+
         if key != None:
             uri = '/%s/_design/%s/_view/%s?key=%s' % (self.database, ddoc, view, json.dumps(key))
         else:
@@ -130,6 +150,7 @@ class Seat(object):
 
 class Utils(object):
     """Utilities for updating views and data validation."""
+
     def __init__(self, seat, path=None):
         self.seat = seat
         self.path = path
@@ -146,6 +167,7 @@ class Utils(object):
 
 class Cache(object):
     """Redis caching layer."""
+
     def __init__(self, seat):
         self.seat = seat
     pass
@@ -166,6 +188,7 @@ class Object(dict):
             user.delete() #Deletes user
             user.delete() #Throws SeatError(404) - Document not found.
     """
+
     def __init__(self, **kwargs):
         for key in kwargs:
             self[key] = kwargs[key]
@@ -228,6 +251,7 @@ class Object(dict):
 
 
 class SeatError(Exception):
+
     def __init__(self, type, message):
             Exception.__init__(self, message)
             self.type = type
