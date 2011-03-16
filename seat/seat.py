@@ -24,9 +24,12 @@ import urlparse
 import string
 import base64
 import httplib
-import json
 import hashlib
 import yaml
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 __author__ = 'Fredrick Galoso'
 __version__ = '0.2.3'

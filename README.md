@@ -34,7 +34,14 @@ Seat-Python is a full featured, lightweight, and extensible Python library for C
 
 * [PyYAML][3]
 
+Optional (Required for Python < 2.6.x):
+
+* [simplejson][6]
+
+*Note: The standard library json module is based on simplejson, but without the C optimizations. Highly recommended for greater performance.*
+
 [3]: http://pyyaml.org/wiki/PyYAML
+[6]: http://simplejson.github.com/simplejson/
 
 **Installation**
     
@@ -57,7 +64,7 @@ In addition, individual tests can be executed by make and are also in the *test/
     $ make test_seat
     $ make test_object
     
-Finally, running tests through Python; CLI arguments are inherited from the [unittest][5] framework.
+Finally, when running tests through Python, CLI arguments are inherited from the [unittest][5] framework.
 
     $ python test/test_seat.py -v
     $ python test/test_object.py
