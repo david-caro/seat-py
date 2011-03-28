@@ -52,10 +52,10 @@ class Seat(object):
             self.HOST = uri.hostname
             self.PORT = str(uri.port)
         if username == None and password == None:
-            self.resource = httplib.HTTPConnection(self.HOST + u':' + self.PORT)
+            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
-            self.resource = httplib.HTTPConnection(self.HOST + u':' + self.PORT)
+            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic ' + string.strip(base64.encodestring(username + ':' + password))}
         self.database = database
 
@@ -66,10 +66,10 @@ class Seat(object):
         username = self._username
         password = self._password
         if username == None and password == None:
-            self.resource = httplib.HTTPConnection(self.HOST + u':' + self.PORT)
+            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
-            self.resource = httplib.HTTPConnection(self.HOST + u':' + self.PORT)
+            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic ' + string.strip(base64.encodestring(username + ':' + password))}
 
     def __send(self, method, args):
@@ -77,22 +77,22 @@ class Seat(object):
         self.__connect()
 
         if (args == None):
-            self.resource.request(method, u'/' + self.database, None, self.headers)
+            self.resource.request(method, '/' + self.database, None, self.headers)
             request = self.resource.getresponse()
             return json.loads(request.read())
         elif (args != None):
-            self.resource.request(method, u'/' + self.database + u'/' + str(args), None, self.headers)
+            self.resource.request(method, '/' + self.database + '/' + str(args), None, self.headers)
             request = self.resource.getresponse()
             return json.loads(request.read())
 
     def get(self, doc=None):
         """Given no arguments, will return status of the database as <type 'dict'>, else it will return a document given an _id.
         """
-        return self.__send(u'GET', doc)
+        return self.__send('GET', doc)
 
     def post(self, path=None):
         """Calls a variety of CouchDB functions such as _compact."""
-        return self.__send(u'POST', path)
+        return self.__send('POST', path)
 
     def put(self, doc=None):
         """Given no arguments, this method will create a new database as instantiated; else it is the primary method to update or create a document.
@@ -109,11 +109,11 @@ class Seat(object):
         self.__connect()
 
         if type(doc).__name__ == 'dict':
-            self.resource.request(u'PUT', u'/' + self.database + u'/' + str(doc['_id']), json.dumps(doc), self.headers)
+            self.resource.request('PUT', '/' + self.database + '/' + str(doc['_id']), json.dumps(doc), self.headers)
             request = self.resource.getresponse()
             return json.loads(request.read())
         else:
-            return self.__send(u'PUT', doc)
+            return self.__send('PUT', doc)
 
     def delete(self, doc=None):
         """Given no arguments, this method will delete the entire database. Otherwise, it will delete a document given an _id and _rev.
@@ -128,11 +128,11 @@ class Seat(object):
         self.__connect()
 
         if type(doc).__name__ == 'dict':
-            self.resource.request(u'DELETE', '/' + self.database + '/' + str(doc['_id']) + u'/?rev=' + str(doc['_rev']), None, self.headers)
+            self.resource.request('DELETE', '/' + self.database + '/' + str(doc['_id']) + '/?rev=' + str(doc['_rev']), None, self.headers)
             request = self.resource.getresponse()
             return json.loads(request.read())
         else:
-            return self.__send(u'DELETE', doc)
+            return self.__send('DELETE', doc)
 
     def view(self, ddoc, view, key=None, args=None):
         """Returns view based on design document, view, and key.
@@ -146,7 +146,7 @@ class Seat(object):
         else:
             uri = '/%s/_design/%s/_view/%s' % (self.database, ddoc, view)
 
-        self.resource.request(u'GET', uri, None, self.headers)
+        self.resource.request('GET', uri, None, self.headers)
         request = self.resource.getresponse()
         return json.loads(request.read())['rows']
 
