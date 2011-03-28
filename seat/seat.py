@@ -42,8 +42,6 @@ class Seat(object):
     USER_AGENT = 'Seat-Python (0.2.3)'
 
     def __init__(self, database='', username=None, password=None):
-        self._username = username
-        self._password = password
         if re.match(r'^http\://|^https://', database):
             uri = urlparse.urlparse(database)
             database = uri.path[1:]
@@ -51,12 +49,15 @@ class Seat(object):
             password = uri.password
             self.HOST = uri.hostname
             self.PORT = str(uri.port)
+        self._username = username
+        self._password = password
         if username == None and password == None:
-            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
+            self.resource = httplib.HTTPConnection(self.HOST, self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
-            self.resource = httplib.HTTPConnection(username + ':' + password + '@' + self.HOST + ':' + self.PORT)
-            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
+            self.resource = httplib.HTTPConnection(self.HOST, self.PORT)
+            auth = string.strip(base64.encodestring('%s:%s' % (username, password)))
+            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic %s' % auth}
         self.database = database
 
         self.Utils = Utils(self)
@@ -66,11 +67,12 @@ class Seat(object):
         username = self._username
         password = self._password
         if username == None and password == None:
-            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
+            self.resource = httplib.HTTPConnection(self.HOST, self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
-            self.resource = httplib.HTTPConnection(username + ':' + password + '@' + self.HOST + ':' + self.PORT)
-            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
+            self.resource = httplib.HTTPConnection(self.HOST, self.PORT)
+            auth = string.strip(base64.encodestring('%s:%s' % (username, password)))
+            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic %s' % auth}
 
     def __send(self, method, args):
         """Private class method to handle most HTTP requests."""
