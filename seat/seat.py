@@ -82,13 +82,13 @@ class Seat(object):
             self.resource.request(method, '/' + self.database, None, self.headers)
             request = self.resource.getresponse()
             result = json.loads(request.read())
-            #self.resource.close()
+            self.resource.close()
             return result
         elif (args != None):
             self.resource.request(method, '/' + self.database + '/' + str(args), None, self.headers)
             request = self.resource.getresponse()
             result = json.loads(request.read())
-            #self.resource.close()
+            self.resource.close()
             return result
 
     def get(self, doc=None):
@@ -118,7 +118,7 @@ class Seat(object):
             self.resource.request('PUT', '/' + self.database + '/' + str(doc['_id']), json.dumps(doc), self.headers)
             request = self.resource.getresponse()
             result = json.loads(request.read())
-            #self.resource.close()
+            self.resource.close()
             return result
         else:
             return self.__send('PUT', doc)
@@ -139,7 +139,7 @@ class Seat(object):
             self.resource.request('DELETE', '/' + self.database + '/' + str(doc['_id']) + '/?rev=' + str(doc['_rev']), None, self.headers)
             request = self.resource.getresponse()
             result = json.loads(request.read())
-            #self.resource.close()
+            self.resource.close()
             return result
         else:
             return self.__send('DELETE', doc)
@@ -159,7 +159,7 @@ class Seat(object):
         self.resource.request('GET', uri, None, self.headers)
         request = self.resource.getresponse()
         result = json.loads(request.read())['rows']
-        #self.resource.close()##self.resource.close()
+        self.resource.close()
         return result
 
 
