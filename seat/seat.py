@@ -56,7 +56,7 @@ class Seat(object):
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
             self.resource = httplib.HTTPConnection(self.HOST, self.PORT)
-            auth = string.strip(base64.encodestring('%s:%s' % (username, password)))
+            auth = string.strip(base64.b64encode('%s:%s' % (username, password)))
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic %s' % auth}
         self.database = database
 
@@ -71,7 +71,7 @@ class Seat(object):
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
             self.resource = httplib.HTTPConnection(self.HOST, self.PORT)
-            auth = string.strip(base64.encodestring('%s:%s' % (username, password)))
+            auth = string.strip(base64.b64encode('%s:%s' % (username, password)))
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic %s' % auth}
 
     def __send(self, method, args):
@@ -81,11 +81,15 @@ class Seat(object):
         if (args == None):
             self.resource.request(method, '/' + self.database, None, self.headers)
             request = self.resource.getresponse()
-            return json.loads(request.read())
+            result = json.loads(request.read())
+            self.resource.close()
+            return result
         elif (args != None):
             self.resource.request(method, '/' + self.database + '/' + str(args), None, self.headers)
             request = self.resource.getresponse()
-            return json.loads(request.read())
+            result = json.loads(request.read())
+            self.resource.close()
+            return result
 
     def get(self, doc=None):
         """Given no arguments, will return status of the database as <type 'dict'>, else it will return a document given an _id.
@@ -113,7 +117,9 @@ class Seat(object):
         if type(doc).__name__ == 'dict':
             self.resource.request('PUT', '/' + self.database + '/' + str(doc['_id']), json.dumps(doc), self.headers)
             request = self.resource.getresponse()
-            return json.loads(request.read())
+            result = json.loads(request.read())
+            self.resource.close()
+            return result
         else:
             return self.__send('PUT', doc)
 
@@ -132,7 +138,9 @@ class Seat(object):
         if type(doc).__name__ == 'dict':
             self.resource.request('DELETE', '/' + self.database + '/' + str(doc['_id']) + '/?rev=' + str(doc['_rev']), None, self.headers)
             request = self.resource.getresponse()
-            return json.loads(request.read())
+            result = json.loads(request.read())
+            self.resource.close()
+            return result
         else:
             return self.__send('DELETE', doc)
 
@@ -150,7 +158,9 @@ class Seat(object):
 
         self.resource.request('GET', uri, None, self.headers)
         request = self.resource.getresponse()
-        return json.loads(request.read())['rows']
+        result = json.loads(request.read())['rows']
+        self.resource.close()
+        return result
 
 
 class Utils(object):
