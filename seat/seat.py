@@ -55,8 +55,8 @@ class Seat(object):
             self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
-            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
-            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic ' + string.strip(base64.encodestring(username + ':' + password))}
+            self.resource = httplib.HTTPConnection(username + ':' + password + '@' + self.HOST + ':' + self.PORT)
+            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         self.database = database
 
         self.Utils = Utils(self)
@@ -69,8 +69,8 @@ class Seat(object):
             self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
             self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
         else:
-            self.resource = httplib.HTTPConnection(self.HOST + ':' + self.PORT)
-            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT, 'Authorization': 'Basic ' + string.strip(base64.encodestring(username + ':' + password))}
+            self.resource = httplib.HTTPConnection(username + ':' + password + '@' + self.HOST + ':' + self.PORT)
+            self.headers = {'Content-Type': 'application/json', 'User-Agent': self.USER_AGENT}
 
     def __send(self, method, args):
         """Private class method to handle most HTTP requests."""
