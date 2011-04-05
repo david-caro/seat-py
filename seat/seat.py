@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-Seat-Python (0.2.3)
+Seat-Python (0.2.4)
 Python CouchDB Wrapper
 https://github.com/stackd/seat-py
 
@@ -21,6 +21,7 @@ Python 2.x.x
 import os
 import re
 import urlparse
+import urllib
 import string
 import base64
 import httplib
@@ -32,14 +33,14 @@ except ImportError:
     import json
 
 __author__ = 'Fredrick Galoso'
-__version__ = '0.2.3'
+__version__ = '0.2.4'
 
 
 class Seat(object):
 
     HOST = 'localhost'
     PORT = '5984'
-    USER_AGENT = 'Seat-Python (0.2.3)'
+    USER_AGENT = 'Seat-Python (0.2.4)'
 
     def __init__(self, database='', username=None, password=None):
         if re.match(r'^http\://|^https://', database):
@@ -144,19 +145,26 @@ class Seat(object):
         else:
             return self.__send('DELETE', doc)
 
-    def view(self, ddoc, view, key=None, args=None):
+    def view(self, ddoc, view, **kwargs):
         """Returns view based on design document, view, and key.
             db = Seat('existing_database')
             db.view('user', 'by_first_name', 'Kenny')
         """
         self.__connect()
 
-        if key != None:
-            uri = '/%s/_design/%s/_view/%s?key=%s' % (self.database, ddoc, view, json.dumps(key))
-        else:
-            uri = '/%s/_design/%s/_view/%s' % (self.database, ddoc, view)
+        uri = '/%s/_design/%s/_view/%s' % (self.database, ddoc, view)
+        for index, key in enumerate(kwargs):
+            if index == 0:
+                uri += '?%s=%s' % (key,
+                        urllib.quote(kwargs[key].replace(' ', ''),
+                    '/:,'))
+            else:
+                uri += '&%s=%s' % (key,
+                        urllib.quote(kwargs[key].replace(' ', ''),
+                    '/:,'))
 
         self.resource.request('GET', uri, None, self.headers)
+        print uri
         request = self.resource.getresponse()
         result = json.loads(request.read())['rows']
         self.resource.close()

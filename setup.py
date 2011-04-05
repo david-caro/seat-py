@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='seat',
-    version='0.2.3',
+    version='0.2.4',
     description='Seat-Python is an elegant and lightweight REST interface to CouchDB, complete with ORM.',
     author='Fredrick Galoso - Stackd, LLC',
     license='MIT/X11',
