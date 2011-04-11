@@ -164,7 +164,6 @@ class Seat(object):
                     '/:,'))
 
         self.resource.request('GET', uri, None, self.headers)
-        print uri
         request = self.resource.getresponse()
         result = json.loads(request.read())['rows']
         self.resource.close()
