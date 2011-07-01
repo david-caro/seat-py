@@ -44,7 +44,14 @@ Optional (Required for Python < 2.6.x):
 [6]: http://simplejson.github.com/simplejson/
 
 **Installation**
-    
+
+With `easy_install` or `pip`:
+
+    $ easy_install -U seat
+    $ pip install seat
+
+From source:    
+
     $ git clone https://github.com/stackd/seat-py.git
     $ cd seat-py
     $ python setup.py install

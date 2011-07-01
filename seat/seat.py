@@ -82,13 +82,19 @@ class Seat(object):
         if (args == None):
             self.resource.request(method, '/' + self.database, None, self.headers)
             request = self.resource.getresponse()
-            result = json.loads(request.read())
+            try:
+                result = json.loads(request.read())
+            except JSONDecodeError:
+                result = request.read()
             self.resource.close()
             return result
         elif (args != None):
             self.resource.request(method, '/' + self.database + '/' + str(args), None, self.headers)
             request = self.resource.getresponse()
-            result = json.loads(request.read())
+            try:
+                result = json.loads(request.read())
+            except JSONDecodeError:
+                result = request.read()
             self.resource.close()
             return result
 
