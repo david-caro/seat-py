@@ -16,6 +16,7 @@ setup(
     license='MIT/X11',
     url='https://github.com/stackd/seat-py',
     download_url='https://github.com/stackd/seat-py',
+    requires=['pyyaml'],
     package_dir=package,
     py_modules=[
         'seat',
