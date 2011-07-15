@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
+import sys
 from distutils.core import setup
+
+if sys.version_info >= (3, 0):
+    package = {'': 'seat/3.x.x'}
+else:
+    package = {'': 'seat/2.x.x'}
 
 setup(
     name='seat',
@@ -10,7 +16,7 @@ setup(
     license='MIT/X11',
     url='https://github.com/stackd/seat-py',
     download_url='https://github.com/stackd/seat-py',
-    package_dir={'': 'seat'},
+    package_dir=package,
     py_modules=[
         'seat',
     ],
