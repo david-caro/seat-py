@@ -6,8 +6,8 @@ import seat
 
 
 DATABASE = 'seat_554e4b55e8cc57f39f16f335b0a63825'
-USER = 'admin'
-PASSWORD = 'admin'
+USER = None
+PASSWORD = None
 
 
 class testSeat(unittest.TestCase):

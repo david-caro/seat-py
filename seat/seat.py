@@ -42,7 +42,7 @@ class Seat(object):
     PORT = '5984'
     USER_AGENT = 'Seat-Python (0.2.4)'
 
-    def __init__(self, database='', username=None, password=None):
+    def __init__(self, database='', username=None, password=None, **kwargs):
         if re.match(r'^http\://|^https://', database):
             uri = urlparse.urlparse(database)
             database = uri.path[1:]
