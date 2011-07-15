@@ -36,7 +36,7 @@ __author__ = 'Fredrick Galoso'
 __version__ = '0.2.4'
 
 
-class Seat(object):
+class Seat:
 
     HOST = 'localhost'
     PORT = '5984'
@@ -176,7 +176,7 @@ class Seat(object):
         return result
 
 
-class Utils(object):
+class Utils:
     """Utilities for updating views and data validation."""
 
     def __init__(self, seat, path=None):
@@ -193,7 +193,7 @@ class Utils(object):
                     print((yaml.load(view)))
 
 
-class Cache(object):
+class Cache:
     """Redis caching layer."""
 
     def __init__(self, seat):
